@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, StyleSheet, FlatList, Text, Dimensions } from 'react-native';
 import Indicators from './Indicators';
 import Slide from './Slide';
+
 const Welcome = ({ slides = [], onDone }) => {
   if (!slides || !slides.length) return null;
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);

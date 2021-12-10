@@ -3,7 +3,7 @@
 import 'react-native-gesture-handler';
 import 'react-navigation';
 import { StatusBar } from 'expo-status-bar';
-
+//var blah = require('./App/assets/Images/question-mark.png');
 import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
@@ -17,7 +17,9 @@ import {
   Image,
   ImageBackground,
   Button,
-  Dimensions
+  Dimensions,
+  Modal,
+  Pressable
 } from 'react-native';
 import { Slider } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
@@ -38,6 +40,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Welcome from './App/screens/WelcomeScreen';
+import BreathingAnimation from './App/screens/breathingAnimation';
 const { width, height } = Dimensions.get('screen');
 const SIZE = width * 0.9;
 
@@ -115,6 +118,23 @@ function MainScreen({ navigation }) {
   return (
     <View style={MainScreenStyles.mainStyle}>
       <StatusBar backgroundColor={'#000'} />
+      {/* <View>
+        <TouchableWithoutFeedback>
+          <View>
+            <ImageBackground
+              source={require('./App/assets/Images/question-mark.png')}
+              style={{
+                resizeMode: 'contain',
+                width: '50%',
+                height: '50%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center'
+              }}
+            ></ImageBackground>
+          </View>
+        </TouchableWithoutFeedback>
+      </View> */}
       <View style={MainScreenStyles.topMenu}>
         <View>
           <Text
@@ -624,6 +644,7 @@ function InformationScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={InformationScreenStyles.paragraph}>
+          <Text></Text>
           <Text style={InformationScreenStyles.paragraphText}> </Text>
           <Text style={InformationScreenStyles.paragraphText}>
             Thank you for your interest in Waterloo Deep Breathing! This
@@ -665,7 +686,7 @@ function InformationScreen({ navigation }) {
           </Text>
 
           <Text style={InformationScreenStyles.paragraphText}> </Text>
-          <Text style={InformationScreenStyles.subtitle}>Focus</Text>
+          {/* <Text style={InformationScreenStyles.subtitle}>Focus</Text>
           <Text style={InformationScreenStyles.paragraphText}>
             The Focus Mode allows users to select from preset breathing
             techniques or customize their breathing rate as they see fit. This
@@ -673,9 +694,9 @@ function InformationScreen({ navigation }) {
             breathing techniques, or wanting to establish a baseline for their
             preferred breathing rate. We recommend this option for those
             experiencing a mild stress response.{' '}
-          </Text>
-          <Text style={InformationScreenStyles.paragraphText}> </Text>
-          <Text style={InformationScreenStyles.subtitle}>Stress</Text>
+          </Text> */}
+          {/* <Text style={InformationScreenStyles.paragraphText}> </Text> */}
+          {/* <Text style={InformationScreenStyles.subtitle}>Stress</Text>
           <Text style={InformationScreenStyles.paragraphText}>
             The Stress Mode provides less options for the user to specify and
             instead asks the user to determine their level of stress (correlated
@@ -685,17 +706,17 @@ function InformationScreen({ navigation }) {
             enacting a relaxation response. We recommend this option for those
             experiencing a mild to moderate stress response.{' '}
           </Text>
-          <Text style={InformationScreenStyles.paragraphText}> </Text>
-          <Text style={InformationScreenStyles.subtitle}>Panic</Text>
-          <Text style={InformationScreenStyles.paragraphText}>
+          <Text style={InformationScreenStyles.paragraphText}> </Text> */}
+          {/* <Text style={InformationScreenStyles.subtitle}>Panic</Text> */}
+          {/* <Text style={InformationScreenStyles.paragraphText}>
             The Panic Mode immediately jumps into a preloaded deep breathing
             regimen to reduce a user’s acute stress response. After a series of
             intervals, the app will ask user if they would like to reduce their
             breathing rate (breaths per minute) or keep at the current level. We
             recommend this option for those experiencing a moderate to severe
             stress response.*{' '}
-          </Text>
-          <Text style={InformationScreenStyles.paragraphText}> </Text>
+          </Text> */}
+          {/* <Text style={InformationScreenStyles.paragraphText}> </Text> */}
         </View>
       </ScrollView>
     </View>
@@ -853,7 +874,7 @@ export class StressScreen extends React.Component {
           <Slider
             // marks
             // size="small"
-            width={(width * 5) / 6}
+            width={(width * 4.5) / 6}
             value={this.state.value}
             onValueChange={(value) => Math.round(this.setState({ value }))}
             step={1}
@@ -1119,14 +1140,19 @@ function BreathingRate(number) {
 
 function TestingWaves({ route, navigation }) {
   const { inhaleTime, topHoldTime, exhaleTime, bottomHoldTime } = route.params;
-
-  const [seconds, setSeconds] = React.useState(0);
-
-  // React.useEffect(() => {
-  //     setTimeout(() => setSeconds(seconds + 1), 1000);
-  // });
-
+  <breathingAnimation
+    item={{ inhaleTime, topHoldTime, exhaleTime, bottomHoldTime }}
+  />;
+  // const [seconds, setSeconds] = React.useState(0);
   const scaleAnim = useRef(new Animated.Value(0)).current;
+  // React.useEffect(() => {
+  //   let timer1 = setTimeout(() => setSeconds((seconds) => seconds + 1), 1000);
+
+  //   return () => {
+  //     clearTimeout(timer1);
+  //   };
+  // }, [seconds]);
+
   Animated.loop(
     Animated.sequence([
       Animated.timing(scaleAnim, {
@@ -1157,15 +1183,18 @@ function TestingWaves({ route, navigation }) {
         <Text style={TestingWavesStyles.text}>
           Bottom Hold Time: {bottomHoldTime}{' '}
         </Text>
-        {/* <Text>
-          {DisplayText(
+        <Text style={[TestingWavesStyles.breatheText]}>
+          {/* {DisplayText(
             seconds,
             inhaleTime,
             topHoldTime,
             exhaleTime,
             bottomHoldTime
-          )}
-        </Text> */}
+          )} */}
+          <BreathingAnimation
+            item={{ inhaleTime, topHoldTime, exhaleTime, bottomHoldTime }}
+          />
+        </Text>
         {/* <Text> {seconds} </Text> */}
         <View style={[TestingWavesStyles.container]}>
           <Animated.View
@@ -1178,44 +1207,44 @@ function TestingWaves({ route, navigation }) {
               }
             ]}
           />
-          <Animated.View
+          {/* <Animated.View
             style={[
               {
-                opacity: Animated.subtract(scaleAnim, 1)
+                opacity: Animated.subtract(scaleAnim, 0.75)
               }
             ]}
           >
-            <Text style={TestingWavesStyles.text}>Inhale</Text>
-          </Animated.View>
+            <Text style={TestingWavesStyles.text}>Inhale</Text> */}
+          {/* </Animated.View> */}
         </View>
       </View>
     </View>
   );
 }
 
-// This function is to be used to display the action the user should be doing alongside the animation, but both break when we try to run them together
+// This function is to be used to display the action the user should be doing alongside the animation, but both break when we try to run them together - UPDATE: Fixed
 
-function DisplayText(
-  seconds,
-  inhaleTime,
-  topHoldTime,
-  exhaleTime,
-  bottomHoldTime
-) {
-  let totalIntervalTime =
-    inhaleTime + topHoldTime + exhaleTime + bottomHoldTime;
-  let curTime = seconds % totalIntervalTime;
-  if (curTime < inhaleTime) {
-    return 'Inhale';
-  } else if (inhaleTime <= curTime && curTime < inhaleTime + topHoldTime) {
-    return 'Hold';
-  } else if (
-    inhaleTime + topHoldTime <= curTime &&
-    curTime < inhaleTime + topHoldTime + exhaleTime
-  ) {
-    return 'Exhale';
-  } else return 'Hold';
-}
+// function DisplayText(
+//   seconds,
+//   inhaleTime,
+//   topHoldTime,
+//   exhaleTime,
+//   bottomHoldTime
+// ) {
+//   let totalIntervalTime =
+//     inhaleTime + topHoldTime + exhaleTime + bottomHoldTime;
+//   let curTime = seconds % totalIntervalTime;
+//   if (curTime < inhaleTime) {
+//     return 'Inhale';
+//   } else if (inhaleTime <= curTime && curTime < inhaleTime + topHoldTime) {
+//     return 'Hold';
+//   } else if (
+//     inhaleTime + topHoldTime <= curTime &&
+//     curTime < inhaleTime + topHoldTime + exhaleTime
+//   ) {
+//     return 'Exhale';
+//   } else return 'Hold';
+// }
 
 // All styles used are listed here, and all are named according to the page they are used on
 
@@ -1563,15 +1592,101 @@ const TestingWavesStyles = StyleSheet.create({
     justifyContent: 'space-evenly'
   },
   breatheBall: {
-    top: height * 0.2,
-    width: SIZE * 0.5,
-    height: SIZE * 0.5,
+    top: height * 0.05,
+    width: SIZE * 0.35,
+    height: SIZE * 0.35,
     alignItems: 'center',
-    // position: 'center',
-    backgroundColor: 'purple',
+    // position: 'absolute',
+    backgroundColor: 'cyan',
+    borderWidth: 3,
+    borderColor: 'black',
     borderRadius: SIZE * 0.25
+  },
+  breatheText: {
+    top: height * 0.3,
+    alignSelf: 'center',
+    fontSize: 30
   }
 });
+
+const helpIcon = StyleSheet.create({
+  main: {
+    right: width * 0.05,
+    bottom: height * 0.01
+  }
+});
+
+const modalBackground = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  container: {
+    width: '80%',
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22
+  },
+  modalView: {
+    margin: 25,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 1
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF'
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3'
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center'
+  },
+  modalIcon: {
+    justifyContent: 'center'
+  }
+});
+
+// const ModalPopup = ({ visible, children }) => {
+//   const [showModal, setShowModal] = React.useState(visible);
+//   return (
+//     <Modal transparent visible={true}>
+//       <View style={modalBackground.main}>
+//         <View style={modalBackground.container}>{children}</View>
+//       </View>
+//     </Modal>
+//   );
+// };
 
 const Stack = createStackNavigator();
 
@@ -1594,6 +1709,7 @@ function App() {
   useEffect(() => {
     checkFirstTimeLOaded();
   }, []);
+
   const slides = [
     {
       key: 1,
@@ -1622,7 +1738,17 @@ function App() {
     AsyncStorage.setItem('isFirstTimeOpen', 'no');
   };
 
-  if (loading) return null;
+  // let popupRef = React.createRef();
+
+  // const onShowPopup = () => {
+  //   popupRef.show();
+  // };
+
+  // const onClosePopup = () => {
+  //   popupRef.close();
+  // };
+  // if (loading) return null;
+  const [modalVisible, setModalVisible] = useState(false);
 
   if (isFirstTimeLoaded) {
     return (
@@ -1651,13 +1777,167 @@ function App() {
             component={MainScreen}
             options={{
               headerTitle: 'Home',
-              HeaderShown: true
+              HeaderShown: true,
+              headerRight: () => (
+                <>
+                  <View style={modalBackground.centeredView}>
+                    <Modal
+                      animationType="fade"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                      <View style={modalBackground.centeredView}>
+                        <View style={modalBackground.modalView}>
+                          <>
+                            {/* <Text style={modalBackground.modalText}>
+                              Hello World!
+                            </Text> */}
+                            <Text style={InformationScreenStyles.paragraphText}>
+                              The Panic Mode immediately jumps into a preloaded
+                              deep breathing regimen to reduce a user’s acute
+                              stress response. After a series of intervals, the
+                              app will ask user if they would like to reduce
+                              their breathing rate (breaths per minute) or keep
+                              at the current level. We recommend this option for
+                              those experiencing a moderate to severe stress
+                              response.*{' '}
+                            </Text>
+                            <Text></Text>
+                          </>
+                          <Pressable
+                            style={
+                              [
+                                // modalBackground.button,
+                                // modalBackground.buttonClose
+                              ]
+                            }
+                            onPress={() => setModalVisible(!modalVisible)}
+                          >
+                            {/* <Text style={modalBackground.textStyle}>X</Text> */}
+                            <View style={modalBackground.modalIcon}>
+                              <Image
+                                source={require('./App/assets/Images/x-mark.png')}
+                                style={{
+                                  resizeMode: 'contain',
+                                  width: width * 0.045,
+                                  height: width * 0.045,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  alignSelf: 'center'
+                                }}
+                              ></Image>
+                            </View>
+                          </Pressable>
+                        </View>
+                      </View>
+                    </Modal>
+                  </View>
+                  <TouchableWithoutFeedback
+                    onPress={() => setModalVisible(true)}
+                  >
+                    <View style={helpIcon.main}>
+                      <Image
+                        source={require('./App/assets/Images/question-mark.png')}
+                        style={{
+                          resizeMode: 'contain',
+                          width: width * 0.055,
+                          height: height * 0.1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center'
+                        }}
+                      ></Image>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </>
+              )
             }}
           />
           <Stack.Screen
             name="FocusScreen"
             component={FocusScreen}
-            options={{ title: 'Focus' }}
+            options={{
+              title: 'Focus',
+              headerRight: () => (
+                <>
+                  <View style={modalBackground.centeredView}>
+                    <Modal
+                      animationType="fade"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                      <View style={modalBackground.centeredView}>
+                        <View style={modalBackground.modalView}>
+                          <>
+                            {/* <Text style={modalBackground.modalText}>
+                            Hello World!
+                          </Text> */}
+                            <Text style={InformationScreenStyles.paragraphText}>
+                              The Focus Mode allows users to select from preset
+                              breathing techniques or customize their breathing
+                              rate as they see fit. This option is great for
+                              those testing out the app, practicing deep
+                              breathing techniques, or wanting to establish a
+                              baseline for their preferred breathing rate. We
+                              recommend this option for those experiencing a
+                              mild stress response.{' '}
+                            </Text>
+                            <Text></Text>
+                          </>
+                          <Pressable
+                            style={
+                              [
+                                // modalBackground.button,
+                                // modalBackground.buttonClose
+                              ]
+                            }
+                            onPress={() => setModalVisible(!modalVisible)}
+                          >
+                            {/* <Text style={modalBackground.textStyle}>X</Text> */}
+                            <View style={modalBackground.modalIcon}>
+                              <Image
+                                source={require('./App/assets/Images/x-mark.png')}
+                                style={{
+                                  resizeMode: 'contain',
+                                  width: width * 0.045,
+                                  height: width * 0.045,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  alignSelf: 'center'
+                                }}
+                              ></Image>
+                            </View>
+                          </Pressable>
+                        </View>
+                      </View>
+                    </Modal>
+                  </View>
+                  <TouchableWithoutFeedback
+                    onPress={() => setModalVisible(true)}
+                  >
+                    <View style={helpIcon.main}>
+                      <Image
+                        source={require('./App/assets/Images/question-mark.png')}
+                        style={{
+                          resizeMode: 'contain',
+                          width: width * 0.055,
+                          height: height * 0.1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center'
+                        }}
+                      ></Image>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </>
+              )
+            }}
           />
           <Stack.Screen
             name="BeginnerScreen"
@@ -1682,7 +1962,87 @@ function App() {
           <Stack.Screen
             name="StressScreen"
             component={StressScreen}
-            options={{ title: 'Stress' }}
+            options={{
+              title: 'Stress',
+              headerRight: () => (
+                <>
+                  <View style={modalBackground.centeredView}>
+                    <Modal
+                      animationType="fade"
+                      transparent={true}
+                      visible={modalVisible}
+                      onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                      }}
+                    >
+                      <View style={modalBackground.centeredView}>
+                        <View style={modalBackground.modalView}>
+                          <>
+                            {/* <Text style={modalBackground.modalText}>
+                            Hello World!
+                          </Text> */}
+                            <Text style={InformationScreenStyles.paragraphText}>
+                              The Stress Mode provides less options for the user
+                              to specify and instead asks the user to determine
+                              their level of stress (correlated with ‘breaths
+                              per minute’) using a scroll bar. Once the level of
+                              stress has been identified, the app will begin a
+                              preloaded breathing regimen to aid the user with
+                              reducing their breathing rate and enacting a
+                              relaxation response. We recommend this option for
+                              those experiencing a mild to moderate stress
+                              response.{' '}
+                            </Text>
+                            <Text></Text>
+                          </>
+                          <Pressable
+                            style={
+                              [
+                                // modalBackground.button,
+                                // modalBackground.buttonClose
+                              ]
+                            }
+                            onPress={() => setModalVisible(!modalVisible)}
+                          >
+                            {/* <Text style={modalBackground.textStyle}>X</Text> */}
+                            <View style={modalBackground.modalIcon}>
+                              <Image
+                                source={require('./App/assets/Images/x-mark.png')}
+                                style={{
+                                  resizeMode: 'contain',
+                                  width: width * 0.045,
+                                  height: width * 0.045,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  alignSelf: 'center'
+                                }}
+                              ></Image>
+                            </View>
+                          </Pressable>
+                        </View>
+                      </View>
+                    </Modal>
+                  </View>
+                  <TouchableWithoutFeedback
+                    onPress={() => setModalVisible(true)}
+                  >
+                    <View style={helpIcon.main}>
+                      <Image
+                        source={require('./App/assets/Images/question-mark.png')}
+                        style={{
+                          resizeMode: 'contain',
+                          width: width * 0.055,
+                          height: height * 0.1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          alignSelf: 'center'
+                        }}
+                      ></Image>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </>
+              )
+            }}
           />
           <Stack.Screen
             name="TestingWaves"
