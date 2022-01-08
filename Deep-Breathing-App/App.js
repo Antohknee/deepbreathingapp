@@ -40,7 +40,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Welcome from './App/screens/WelcomeScreen';
-import BreathingAnimation from './App/screens/breathingAnimation';
+import BreathingAnimation from './App/screens/BreathingAnimation';
 const { width, height } = Dimensions.get('screen');
 const SIZE = width * 0.9;
 
@@ -1140,7 +1140,7 @@ function BreathingRate(number) {
 
 function TestingWaves({ route, navigation }) {
   const { inhaleTime, topHoldTime, exhaleTime, bottomHoldTime } = route.params;
-  <breathingAnimation
+  <BreathingAnimation
     item={{ inhaleTime, topHoldTime, exhaleTime, bottomHoldTime }}
   />;
   // const [seconds, setSeconds] = React.useState(0);
